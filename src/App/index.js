@@ -1,7 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+
+import Button from '../Button/index';
+import Search from '../Search/index';
+import Table from '../Table/index';
+
 // import logo from './logo.svg';
 import axios from 'axios';
-import './App.css';
+import '../App.css';
 
 const DEFAULT_QUERY = 'redux';
 const DEFAULT_HPP = '100';
@@ -39,7 +44,7 @@ const PARAM_HPP = 'hitsPerPage=';
 class App extends Component {
   _isMounted = false;
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       results: null,
@@ -77,7 +82,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
     const oldHits = results && results[searchKey]
       ? results[searchKey].hits
       : [];
-    
+
     const updatedHits = [
       ...oldHits,
       ...hits
@@ -116,8 +121,8 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       }
     });
   }
-  onSearchChange(event){
-    this.setState({ searchTerm: event.target.value});
+  onSearchChange(event) {
+    this.setState({ searchTerm: event.target.value });
   }
 
   render() {
@@ -141,7 +146,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
     return (
       <div className="page">
         <div className="interactions">
-          <Search 
+          <Search
             value={searchTerm}
             onChange={this.onSearchChange}
             onSubmit={this.onSearchSubmit}
@@ -157,14 +162,14 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
             onDismiss={this.onDismiss}
           />
         }
-        
+
         <div className="interactions">
           <Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
             More
           </Button>
         </div>
       </div>
-      
+
     );
   }
 }
