@@ -1,45 +1,27 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+
+import Button from '../Button';
+import Search from '../Search';
+import Table from '../Table';
+
 // import logo from './logo.svg';
 import axios from 'axios';
-import './App.css';
+import './index.css';
 
-const DEFAULT_QUERY = 'redux';
-const DEFAULT_HPP = '100';
-
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const PARAM_HPP = 'hitsPerPage=';
-
-/* const isSearched = searchTerm => item =>
-  item.title.toLowerCase().includes(searchTerm.toLowerCase()); */
-
-
-/* const list = [
-  {
-    title: 'React',
-    url: 'https://facebook.github.io/react/',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'Redux',
-    url: 'https://github.com/reactjs/redux',
-    author: 'Dan Abramov, Andrew Clark',
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-];
- */
+import {
+  DEFAULT_QUERY,
+  DEFAULT_HPP,
+  PATH_BASE,
+  PATH_SEARCH,
+  PARAM_SEARCH,
+  PARAM_PAGE,
+  PARAM_HPP,
+} from '../../constants';
 
 class App extends Component {
   _isMounted = false;
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       results: null,
@@ -77,7 +59,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
     const oldHits = results && results[searchKey]
       ? results[searchKey].hits
       : [];
-    
+
     const updatedHits = [
       ...oldHits,
       ...hits
@@ -116,8 +98,8 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       }
     });
   }
-  onSearchChange(event){
-    this.setState({ searchTerm: event.target.value});
+  onSearchChange(event) {
+    this.setState({ searchTerm: event.target.value });
   }
 
   render() {
@@ -141,7 +123,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
     return (
       <div className="page">
         <div className="interactions">
-          <Search 
+          <Search
             value={searchTerm}
             onChange={this.onSearchChange}
             onSubmit={this.onSearchSubmit}
@@ -157,14 +139,14 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
             onDismiss={this.onDismiss}
           />
         }
-        
+
         <div className="interactions">
           <Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
             More
           </Button>
         </div>
       </div>
-      
+
     );
   }
 }
