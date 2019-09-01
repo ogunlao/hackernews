@@ -1,21 +1,29 @@
-import React, {Component} from 'react';
-// import logo from './logo.svg';
+import React, { Component } from 'react';
+
+import Button from '../Button';
+import Search from '../Search';
+import Table from '../Table';
+import { Loading } from '.'
+
 import axios from 'axios';
 import './App.css';
 
-const DEFAULT_QUERY = 'redux';
-const DEFAULT_HPP = '100';
+import api_url from '../../utils';
 
-const PATH_BASE = 'https://hn.algolia.com/api/v1';
-const PATH_SEARCH = '/search';
-const PARAM_SEARCH = 'query=';
-const PARAM_PAGE = 'page=';
-const PARAM_HPP = 'hitsPerPage=';
+const {
+  DEFAULT_QUERY,
+  DEFAULT_HPP,
+  PATH_BASE,
+  PATH_SEARCH,
+  PARAM_SEARCH,
+  PARAM_PAGE,
+  PARAM_HPP,
+} = api_url;
 
 class App extends Component {
   _isMounted = false;
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       results: null,
@@ -55,7 +63,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
     const oldHits = results && results[searchKey]
       ? results[searchKey].hits
       : [];
-    
+
     const updatedHits = [
       ...oldHits,
       ...hits
@@ -66,7 +74,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
         ...results,
         [searchKey]: { hits: updatedHits, page }
       },
-      isLoading: false
+      isLoading: false,
     });
   }
 
@@ -95,8 +103,8 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       }
     });
   }
-  onSearchChange(event){
-    this.setState({ searchTerm: event.target.value});
+  onSearchChange(event) {
+    this.setState({ searchTerm: event.target.value });
   }
 
   render() {
@@ -121,7 +129,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
     return (
       <div className="page">
         <div className="interactions">
-          <Search 
+          <Search
             value={searchTerm}
             onChange={this.onSearchChange}
             onSubmit={this.onSearchSubmit}
@@ -137,7 +145,7 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
             onDismiss={this.onDismiss}
           />
         }
-        
+
         <div className="interactions">
           {isLoading
             ? <Loading />
@@ -148,69 +156,10 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
           }
         </div>
       </div>
-      
+
     );
   }
 }
-
-const Search = ({ 
-  value, 
-  onChange,
-  onSubmit, 
-  children
- }) =>
-  <form onSubmit={onSubmit}>
-    {children} <input
-      type="text"
-      value={value}
-      onChange={onChange}
-    />
-    <button type="submit">
-      {children}
-    </button>
-  </form>
-
-
-const Table = ({ list, onDismiss}) =>
-  <div className="table">
-        {list.map(item =>
-          <div key={item.objectID} className="table-row">
-            <span style={{ width: '40%' }}>
-              <a href={item.url}>{item.title}</a>
-            </span>
-            <span style={{ width: '30%' }}>
-              {item.author}
-            </span>
-            <span style={{ width: '10%' }}>
-              {item.num_comments}
-            </span>
-            <span style={{ width: '10%' }}>
-              {item.points}
-            </span>
-            <span style={{ width: '10%' }}>
-              <Button
-                onClick={() => onDismiss(item.objectID)}
-                className="button-inline"
-              >
-                Dismiss
-              </Button>
-            </span>
-          </div>
-        )}
-      </div>
-
-const Button = ({onClick, className='', children}) =>
-      <button
-        onClick={onClick}
-        className={className}
-        type="button"
-      >
-        {children}
-      </button>
-
-const Loading = () =>
-  <div>
-    <i class="fas fa-spinner fa-pulse"></i> Loading ...</div>
 
 export default App;
 
