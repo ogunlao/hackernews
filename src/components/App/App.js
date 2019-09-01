@@ -162,3 +162,9 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
 }
 
 export default App;
+
+export {
+  Button,
+  Search,
+  Table,
+};
