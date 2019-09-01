@@ -12,30 +12,6 @@ const PARAM_SEARCH = 'query=';
 const PARAM_PAGE = 'page=';
 const PARAM_HPP = 'hitsPerPage=';
 
-/* const isSearched = searchTerm => item =>
-  item.title.toLowerCase().includes(searchTerm.toLowerCase()); */
-
-
-/* const list = [
-  {
-    title: 'React',
-    url: 'https://facebook.github.io/react/',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    objectID: 0,
-  },
-  {
-    title: 'Redux',
-    url: 'https://github.com/reactjs/redux',
-    author: 'Dan Abramov, Andrew Clark',
-    num_comments: 2,
-    points: 5,
-    objectID: 1,
-  },
-];
- */
-
 class App extends Component {
   _isMounted = false;
 
@@ -45,7 +21,8 @@ class App extends Component {
       results: null,
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
-      error: null
+      error: null,
+      isLoading: false,
     };
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
@@ -58,6 +35,7 @@ class App extends Component {
     return !this.state.results[searchTerm];
   }
   fetchSearchTopStories(searchTerm, page = 0) {
+    this.setState({ isLoading: true });
     axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}\
 ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       .then(result => this._isMounted && this.setSearchTopStories(result.data))
@@ -87,7 +65,8 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       results: {
         ...results,
         [searchKey]: { hits: updatedHits, page }
-      }
+      },
+      isLoading: false
     });
   }
 
@@ -125,7 +104,8 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       searchTerm,
       results,
       searchKey,
-      error
+      error,
+      isLoading
     } = this.state;
     const page = (
       results &&
@@ -159,9 +139,13 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
         }
         
         <div className="interactions">
-          <Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
-            More
-          </Button>
+          {isLoading
+            ? <Loading />
+            : <Button
+                onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+                More
+              </Button>
+          }
         </div>
       </div>
       
@@ -223,6 +207,10 @@ const Button = ({onClick, className='', children}) =>
       >
         {children}
       </button>
+
+const Loading = () =>
+  <div>
+    <i class="fas fa-spinner fa-pulse"></i> Loading ...</div>
 
 export default App;
 
