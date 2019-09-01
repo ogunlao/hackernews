@@ -1,21 +1,5 @@
-import React from 'react';
+// Entry point into the Search component
 
-const Search = ({
-  value,
-  onChange,
-  onSubmit,
-  children
-}) =>
-  <form onSubmit={onSubmit}>
-    {children} <input
-      type="text"
-      value={value}
-      onChange={onChange}
-    />
-    <button type="submit">
-      {children}
-    </button>
-  </form>
-
+import Search from './Search';
 
 export default Search;

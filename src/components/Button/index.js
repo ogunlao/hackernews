@@ -1,12 +1,5 @@
-import React from 'react';
+// Entry point into the Button component
 
-const Button = ({ onClick, className = '', children }) =>
-  <button
-    onClick={onClick}
-    className={className}
-    type="button"
-  >
-    {children}
-  </button>
+import Button from './Button';
 
 export default Button;
