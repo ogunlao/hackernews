@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Button from '../Button';
 import Search from '../Search';
 import Table from '../Table';
+import { Loading } from '.'
 
 import axios from 'axios';
 import './App.css';
@@ -28,7 +29,8 @@ class App extends Component {
       results: null,
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
-      error: null
+      error: null,
+      isLoading: false,
     };
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
@@ -41,6 +43,7 @@ class App extends Component {
     return !this.state.results[searchTerm];
   }
   fetchSearchTopStories(searchTerm, page = 0) {
+    this.setState({ isLoading: true });
     axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}\
 ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       .then(result => this._isMounted && this.setSearchTopStories(result.data))
@@ -70,7 +73,8 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       results: {
         ...results,
         [searchKey]: { hits: updatedHits, page }
-      }
+      },
+      isLoading: false,
     });
   }
 
@@ -108,7 +112,8 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
       searchTerm,
       results,
       searchKey,
-      error
+      error,
+      isLoading
     } = this.state;
     const page = (
       results &&
@@ -142,9 +147,13 @@ ${page}&${PARAM_HPP}${DEFAULT_HPP}`)
         }
 
         <div className="interactions">
-          <Button onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
-            More
-          </Button>
+          {isLoading
+            ? <Loading />
+            : <Button
+                onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}>
+                More
+              </Button>
+          }
         </div>
       </div>
 
